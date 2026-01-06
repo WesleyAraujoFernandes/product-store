@@ -1,14 +1,14 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
   <div class="form-content-container">
     <mat-form-field>
-      <mat-label>Título</mat-label>
+      <mat-label>Descrição</mat-label>
       <input
         matInput
         type="text"
         name="title"
         id="title"
         formControlName="title"
-        placeholder="Digite o título"
+        placeholder="Descrição do produto"
       />
     </mat-form-field>
     <button type="submit" mat-raised-button color="accent">Salvar</button>
