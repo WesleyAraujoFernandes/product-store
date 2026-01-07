@@ -11,6 +11,7 @@ import {
 } from '@angular/material/dialog';
 import { CardComponent } from './components/card/card.component';
 import { Router, RouterLink } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-confirmation-dialog',
@@ -71,8 +72,15 @@ export class ListComponent implements OnInit {
     this.matDialog
       .open(ConfirmationDialogComponent)
       .afterClosed()
-      .subscribe((answer: boolean) => {
-        console.log('afterClosed', answer);
+      .pipe(
+        filter(answer => answer === true)
+      )
+      .subscribe(() => {
+        this.productsService.delete(product.id).subscribe(() => {
+          this.productsService.getAll().subscribe((products) => {
+            this.products = this.products;
+          });
+        });
       });
   }
 }
