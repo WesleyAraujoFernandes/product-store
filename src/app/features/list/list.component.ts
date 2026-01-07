@@ -19,9 +19,9 @@ import { Router, RouterLink } from '@angular/router';
     <mat-dialog-content>
       Você tem certeza que quer deletar esse produto?
     </mat-dialog-content>
-    <mat-dialog-actions>
+    <mat-dialog-actions align="end">
       <button mat-button (click)="onNo()">Não</button>
-      <button mat-button (click)="onYes()" cdkFocusInitial>Sim</button>
+      <button mat-raised-button color="accent" (click)="onYes()" cdkFocusInitial>Sim</button>
     </mat-dialog-actions>
   `,
   standalone: true,
@@ -71,8 +71,8 @@ export class ListComponent implements OnInit {
     this.matDialog
       .open(ConfirmationDialogComponent)
       .afterClosed()
-      .subscribe((data) => {
-        console.log('afterClosed', data);
+      .subscribe((answer: boolean) => {
+        console.log('afterClosed', answer);
       });
   }
 }
