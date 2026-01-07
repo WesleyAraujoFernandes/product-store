@@ -15,19 +15,29 @@ import { Router, RouterLink } from '@angular/router';
 @Component({
   selector: 'app-confirmation-dialog',
   template: `
-    <h2 mat-dialog-title>Delete fine</h2>
+    <h2 mat-dialog-title>Deletar Produto</h2>
     <mat-dialog-content>
-      Você quer deletar o registro selecionado?
+      Você tem certeza que quer deletar esse produto?
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button mat-dialog-close>Não</button>
-      <button mat-button mat-dialog-close cdkFocusInitial>Sim</button>
+      <button mat-button (click)="onNo()">Não</button>
+      <button mat-button (click)="onYes()" cdkFocusInitial>Sim</button>
     </mat-dialog-actions>
   `,
   standalone: true,
   imports: [MatButtonModule, MatDialogModule],
 })
-export class ConfirmationDialogComponent {}
+export class ConfirmationDialogComponent {
+  matDialogRef = inject(MatDialogRef);
+
+  onNo() {
+    this.matDialogRef.close(false);
+  }
+
+  onYes() {
+    this.matDialogRef.close(true);
+  }
+}
 @Component({
   selector: 'app-list',
   standalone: true,
