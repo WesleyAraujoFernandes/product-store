@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../shared/services/products.service';
 import { Product } from '../../shared/interfaces/product.interface';
 import { MatCardModule } from '@angular/material/card';
@@ -7,7 +7,7 @@ import {
   MatDialogModule
 } from '@angular/material/dialog';
 import { CardComponent } from './components/card/card.component';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialogService } from './../../shared/services/confirmation-dialog.service';
 
@@ -25,17 +25,11 @@ import { ConfirmationDialogService } from './../../shared/services/confirmation-
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss',
 })
-export class ListComponent implements OnInit {
-  products: Product[] = [];
+export class ListComponent {
+  products = signal<Product[]>(inject(ActivatedRoute).snapshot.data['products']);
   productsService = inject(ProductsService);
   router = inject(Router);
   confirmationDialogService = inject(ConfirmationDialogService);
-
-  ngOnInit(): void {
-    this.productsService.getAll().subscribe((products) => {
-      this.products = products;
-    });
-  }
 
   onEdit(product: Product) {
     this.router.navigate(['/edit-product', product.id]);
@@ -74,7 +68,7 @@ export class ListComponent implements OnInit {
       )
       .subscribe({
         next: (products) => {
-          this.products = products;
+          this.products.set(products)
         },
         error: (err) => {
           console.error('Erro ao deletar produto', err);
