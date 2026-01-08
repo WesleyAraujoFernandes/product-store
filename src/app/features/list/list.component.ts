@@ -4,12 +4,11 @@ import { Product } from '../../shared/interfaces/product.interface';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import {
-  MatDialog,
   MatDialogModule
 } from '@angular/material/dialog';
 import { CardComponent } from './components/card/card.component';
 import { Router, RouterLink } from '@angular/router';
-import { filter } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 import { ConfirmationDialogService } from './../../shared/services/confirmation-dialog.service';
 
 
@@ -41,15 +40,46 @@ export class ListComponent implements OnInit {
   onEdit(product: Product) {
     this.router.navigate(['/edit-product', product.id]);
   }
-
+  /*
   onDelete(product: Product) {
     this.confirmationDialogService.openDialog()
+      .pipe(filter(answer => answer === true))
       .subscribe(() => {
-        this.productsService.delete(product.id).subscribe(() => {
+        this.productsService.delete(product.id).subscribe((answer) => {
           this.productsService.getAll().subscribe((products) => {
             this.products = this.products;
           });
         });
       });
   }
+  onDelete(product: Product) {
+    this.confirmationDialogService
+      .openDialog()
+      .pipe(filter(Boolean))
+      .subscribe(() => {
+        this.productsService.delete(product.id).subscribe(() => {
+          this.products = this.products.filter(p => p.id !== product.id);
+        });
+      });
+  }
+
+      */
+  onDelete(product: Product) {
+    this.confirmationDialogService
+      .openDialog()
+      .pipe(
+        filter(Boolean),
+        switchMap(() => this.productsService.delete(product.id)),
+        switchMap(() => this.productsService.getAll())
+      )
+      .subscribe({
+        next: (products) => {
+          this.products = products;
+        },
+        error: (err) => {
+          console.error('Erro ao deletar produto', err);
+        }
+      });
+  }
+
 }
