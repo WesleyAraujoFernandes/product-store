@@ -1,16 +1,3 @@
 {
-  "products": [
-    {
-      "id": "0a62",
-      "title": "Blusa"
-    },
-    {
-      "id": "fed4",
-      "title": "Moleton"
-    },
-    {
-      "id": "d698",
-      "title": "Criando novo produto"
-    }
-  ]
+  "products": []
 }

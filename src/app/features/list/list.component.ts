@@ -28,8 +28,7 @@ import { NoItemsComponent } from "./components/no-items/no-items.component";
   styleUrl: './list.component.scss',
 })
 export class ListComponent {
-  products = signal<Product[]>([]);
-  //products = signal<Product[]>(inject(ActivatedRoute).snapshot.data['products']);
+  products = signal<Product[]>(inject(ActivatedRoute).snapshot.data['products']);
   productsService = inject(ProductsService);
   router = inject(Router);
   confirmationDialogService = inject(ConfirmationDialogService);
